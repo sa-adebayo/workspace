@@ -1,15 +1,9 @@
 #!/usr/bin/env bash
 
-echo installing oh-my-zsh...
-sh oh-my-zsh.sh
+echo "Powering up = >>> = >>>..."
+sh power-up.sh
 if [ $? -ne 0 ]; then
+	echo "I couldn't powerup the commandline.. let's try again some other time..."
 	exit 1
 fi
-
-echo backup and copying zsh configs...
-cp chilee.zsh-theme $HOME/.oh-my-zsh/custom/themes
-cp custom.zsh $HOME/.oh-my-zsh/custom
-if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
-	mv ~/.zshrc ~/.zshrc.pre-oh-my-zsh
-fi
-cp zshrc $HOME/.zshrc
+echo "Successfully powered up the commandline"
