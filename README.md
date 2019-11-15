@@ -1,3 +1,6 @@
-# My Workspace
+dotfiles
+========
 
-## Installation
+zsh, tmux, neovim and i3 configurations.
+
+![Vim](screenshots/vim.png)
