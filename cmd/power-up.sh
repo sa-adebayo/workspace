@@ -27,9 +27,13 @@ main() {
 	# install command line power mode
 	printf "${BLUE}Checking z, jump around...${NORMAL}\n"
 	if ! command -v z >/dev/null 2>&1; then
-		printf "${YELLOW}z, jump around is not installed!${NORMAL} Let's install z first!\n"
-		printf "${BLUE}Installing z, jump around...${NORMAL}\n"
-		brew install z
+		if [ -f /usr/local/etc/profile.d/z.sh ] || [ -h /usr/local/etc/profile.d/z.sh ]; then
+			printf "${YELLOW}Found z, jump around already exist.${NORMAL} ${GREEN}Sourcing into zshrc right away!${NORMAL}\n"
+		else
+			printf "${YELLOW}z, jump around is not installed!${NORMAL} Let's install z first!\n"
+			printf "${BLUE}Installing z, jump around...${NORMAL}\n"
+			brew install z
+		fi
 		echo '. /usr/local/etc/profile.d/z.sh' >>~/.zshrc
 	fi
 
@@ -38,6 +42,8 @@ main() {
 		printf "${YELLOW}fzf, a fast fuzzy finder is not installed!${NORMAL} Let's install fzf first!\n"
 		printf "${BLUE}Installing fzf, a fast fuzzy finder...${NORMAL}\n"
 		brew install fzf
+	else
+		printf "${YELLOW}Found fzf, a fast fuzzy finder already exist.${NORMAL}\n"
 	fi
 
 	printf "${BLUE}Checking bat, view files with syntax highlighting...${NORMAL}\n"
@@ -45,6 +51,8 @@ main() {
 		printf "${YELLOW}bat, view with syntax highlighting is not installed!${NORMAL} Let's install bat first!\n"
 		printf "${BLUE}Installing bat, view files with syntax highlighting..${NORMAL}\n"
 		brew install bat
+	else
+		printf "${YELLOW}Found bat, view files with syntax highlighting already exist.${NORMAL}\n"
 	fi
 
 	printf "${BLUE}Checking exa, an alternative to ls...${NORMAL}\n"
@@ -52,6 +60,8 @@ main() {
 		printf "${YELLOW}exa, an alternative to ls is not installed!${NORMAL} Let's install exa first!\n"
 		printf "${BLUE}Installing exa, an alternative to ls..${NORMAL}\n"
 		brew install exa
+	else
+		printf "${YELLOW}Found exa, an alternative to ls already exist.${NORMAL}\n"
 	fi
 
 	printf "${BLUE}Checking fd, for finding files & directories...${NORMAL}\n"
@@ -59,6 +69,8 @@ main() {
 		printf "${YELLOW}fd, for finding files & directories is not installed!${NORMAL} Let's install fd first!\n"
 		printf "${BLUE}Installing fd, for finding files & directories..${NORMAL}\n"
 		brew install fd
+	else
+		printf "${YELLOW}Found fd, for finding files & directories already exist.${NORMAL}\n"
 	fi
 
 	printf "${BLUE}Checking rg (ripgrep), for finding strings in files...${NORMAL}\n"
@@ -66,6 +78,8 @@ main() {
 		printf "${YELLOW}rg (ripgrep), for finding strings in files is not installed!${NORMAL} Let's install ripgrep first!\n"
 		printf "${BLUE}Installing rg (ripgrep), for finding strings in files..${NORMAL}\n"
 		brew install ripgrep
+	else
+		printf "${YELLOW}Found rg (ripgrep), for finding strings in files already exist.${NORMAL}\n"
 	fi
 
 	printf "${GREEN}"

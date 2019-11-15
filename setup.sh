@@ -3,8 +3,8 @@
 dirs=(
 	"neovim"
 	"tmux"
-	"cmd"
 	"zsh"
+	"cmd"
 )
 
 if [ -z "$distro" ]; then

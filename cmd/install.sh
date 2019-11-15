@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Powering up = >>> = >>>..."
+echo "Powering up..."
 sh power-up.sh
 if [ $? -ne 0 ]; then
 	echo "I couldn't powerup the commandline.. let's try again some other time..."
