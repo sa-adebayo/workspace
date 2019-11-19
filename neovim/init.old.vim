@@ -7,7 +7,7 @@ endif
 
 let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
 
-let g:vim_bootstrap_langs = "go,html,javascript,php,python,ruby"
+let g:vim_bootstrap_langs = "go,html,javascript,php,python,ruby,scala"
 let g:vim_bootstrap_editor = "nvim"				" nvim or vim
 
 if !filereadable(vimplug_exists)
@@ -28,6 +28,8 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
@@ -36,15 +38,19 @@ Plug 'vim-scripts/CSApprox'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'Raimondi/delimitMate'
 Plug 'majutsushi/tagbar'
+Plug 'scrooloose/syntastic'
 Plug 'Yggdroot/indentLine'
+Plug 'avelino/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
 Plug 'cloudhead/neovim-fuzzy'
+Plug 'neomake/neomake'
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'elzr/vim-json'
 Plug 'Chiel92/vim-autoformat'
 Plug 'w0rp/ale'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 
 let g:make = 'gmake'
 if exists('make')
@@ -60,6 +66,17 @@ if v:version >= 703
   Plug 'shougo/vimshell.vim'
 endif
 
+if v:version >= 704
+  "" Snippets
+  Plug 'SirVer/ultisnips'
+  Plug 'FelikZ/ctrlp-py-matcher'
+endif
+
+Plug 'honza/vim-snippets'
+
+"" Color
+Plug 'tomasr/molokai'
+
 "*****************************************************************************
 "" Custom bundles
 "*****************************************************************************
@@ -67,6 +84,84 @@ endif
 " file search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+" autocomplete
+" Code completion with Deoplete - enabled by ensime
+if has('nvim')
+  Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
+
+" Set a single option
+" call deoplete#custom#option('auto_complete_delay', 200)
+
+" Pass a dictionary to set multiple options
+" call deoplete#custom#option({
+" \   'auto_complete_delay': 200,
+" \   'smart_case': v:true,
+" \ })
+
+let g:deoplete#sources = {}
+let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'omni', 'ultisnips']
+let g:deoplete#omni#input_patterns = {}
+let g:deoplete#omni#input_patterns.scala = '[^. *\t]\.\w*'
+
+" go
+"" Go Lang Bundle
+Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
+
+
+" html
+"" HTML Bundle
+Plug 'hail2u/vim-css3-syntax'
+Plug 'gorodinskiy/vim-coloresque'
+Plug 'tpope/vim-haml'
+Plug 'mattn/emmet-vim'
+
+
+" javascript
+"" Javascript Bundle
+Plug 'jelera/vim-javascript-syntax'
+Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
+
+
+" php
+"" PHP Bundle
+Plug 'arnaud-lb/vim-php-namespace'
+
+
+" python
+"" Python Bundle
+Plug 'davidhalter/jedi-vim'
+
+
+" ruby
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rake'
+Plug 'tpope/vim-projectionist'
+Plug 'thoughtbot/vim-rspec'
+Plug 'ecomba/vim-ruby-refactoring'
+
+
+" autocomplete Go
+Plug 'zchee/deoplete-go', { 'do': 'make'}
+
+" file search
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+" rust
+Plug 'rust-lang/rust.vim'
+Plug 'racer-rust/vim-racer'
+
+" scala
+Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
+Plug 'derekwyatt/vim-scala'
 
 "*****************************************************************************
 "*****************************************************************************
@@ -123,6 +218,7 @@ set noswapfile
 
 set fileformats=unix,dos,mac
 set showcmd
+set shell=/bin/zsh
 
 " session management
 let g:session_directory = "~/.config/nvim/session"
@@ -139,6 +235,9 @@ set number
 set relativenumber
 
 let no_buffers_menu=1
+if !exists('g:not_finish_vimplug')
+  colorscheme molokai
+endif
 
 set mousemodel=popup
 set t_Co=256
@@ -158,7 +257,6 @@ else
   let g:indentLine_concealcursor = 0
   let g:indentLine_char = '┆'
   let g:indentLine_faster = 1
-
 endif
 
 "" Disable the blinking cursor.
@@ -283,6 +381,11 @@ set autoread
 "" Mappings
 "*****************************************************************************
 
+"" AutoFormat
+noremap <F5> :Autoformat<CR>
+let g:formatdef_scalafmt = "'scalafmt --stdin'"
+let g:formatters_scala = ['scalafmt']
+
 "" Split
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
@@ -317,11 +420,47 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 "" Opens a tab edit command with the path of the currently edited file filled
 noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
+"" ctrlp.vim
+set wildmode=list:longest,list:full
+set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
+let g:ctrlp_user_command = "find %s -type f | grep -Ev '"+ g:ctrlp_custom_ignore +"'"
+let g:ctrlp_use_caching = 1
+
+" The Silver Searcher
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep\ --column
+  set grepformat^=%f:%l:%c:%m
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  let g:ctrlp_use_caching = 0
+  command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+  nnoremap \ :Ag<SPACE>
+  nnoremap <leader>, :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+endif
+
+nmap <silent> <leader><RIGHT> :cnext<CR>
+nmap <silent> <leader><LEFT> :cprev<CR>
+
+cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
+noremap <leader>b :CtrlPBuffer<CR>
+let g:ctrlp_map = '<leader>e'
+let g:ctrlp_open_new_file = 'r'
+let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
+
 " snippets
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:UltiSnipsEditSplit="vertical"
+
+" syntastic
+let g:syntastic_always_populate_loc_list=1
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+let g:syntastic_style_error_symbol = '✗'
+let g:syntastic_style_warning_symbol = '⚠'
+let g:syntastic_auto_loc_list=1
+let g:syntastic_aggregate_errors = 1
 
 " Tagbar
 nmap <silent> <F4> :TagbarToggle<CR>
@@ -412,9 +551,128 @@ let g:tagbar_type_go = {
 
 autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
 
+" vim-go
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#cmd#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+
+let g:go_list_height = 10
+let g:go_list_type = "quickfix"
+let g:go_fmt_command = "goimports"
+let g:go_fmt_fail_silently = 1
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_space_tab_error = 1
+let g:go_highlight_array_whitespace_error = 1
+let g:go_highlight_trailing_whitespace_error = 1
+let g:go_highlight_extra_types = 0
+
+autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+
+augroup completion_preview_close
+  autocmd!
+  if v:version > 703 || v:version == 703 && has('patch598')
+    autocmd CompleteDone * if !&previewwindow && &completeopt =~ 'preview' | silent! pclose | endif
+  endif
+augroup END
+
+augroup go
+
+  au!
+  au Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  au Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  au Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  au Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+
+  au FileType go nmap <Leader>dd <Plug>(go-def-vertical)
+  au FileType go nmap <Leader>dv <Plug>(go-doc-vertical)
+  au FileType go nmap <Leader>db <Plug>(go-doc-browser)
+
+  au FileType go nmap <leader>r  <Plug>(go-run)
+  au FileType go nmap <leader>t  <Plug>(go-test)
+  au FileType go nmap <Leader>gt <Plug>(go-coverage-toggle)
+  au FileType go nmap <Leader>i <Plug>(go-info)
+  au FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
+  au FileType go nmap <C-g> :GoDecls<cr>
+  au FileType go imap <C-g> <esc>:<C-u>GoDecls<cr>
+  au FileType go nmap <leader>rb :<C-u>call <SID>build_go_files()<CR>
+
+augroup END
+
 " html
 " for html files, 2 spaces
 autocmd Filetype html setlocal ts=2 sw=2 expandtab
+
+" javascript
+let g:javascript_enable_domhtmlcss = 1
+" for javascript files, 2 spaces
+autocmd Filetype javascript setlocal ts=2 sw=2 expandtab
+autocmd Filetype javascript map gd :TernDef<cr>
+autocmd Filetype javascript map <leader>r :TernRefs<cr>
+autocmd Filetype javascript map <leader>es :silent !es-beautifier %:p > /dev/null <cr>
+
+let g:deoplete#omni#functions = {}
+let g:deoplete#omni#functions.javascript = [
+  \ 'tern#Complete',
+  \ 'jspc#omni'
+\]
+
+let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips', 'ternjs']
+let g:tern#command = ['tern']
+let g:tern#arguments = ['--persistent']
+
+let g:syntastic_javascript_eslint_exe='$(npm bin)/eslint'
+let g:syntastic_javascript_checkers=['eslint']
+
+" vim-javascript
+augroup vimrc-javascript
+  autocmd!
+  autocmd FileType javascript set tabstop=2|set shiftwidth=2|set expandtab softtabstop=2 smartindent
+augroup END
+
+" css
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+
+
+" php
+
+
+" python
+" vim-python
+augroup vimrc-python
+  autocmd!
+  autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8 colorcolumn=79
+      \ formatoptions+=croq softtabstop=4 smartindent
+      \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+augroup END
+
+" jedi-vim
+let g:jedi#popup_on_dot = 0
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = "<leader>d"
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#show_call_signatures = "1"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#smart_auto_mappings = 0
+
+" syntastic
+let g:syntastic_python_checkers=['python', 'flake8']
 
 " vim-airline
 let g:airline#extensions#virtualenv#enabled = 1
@@ -423,6 +681,50 @@ let g:airline#extensions#virtualenv#enabled = 1
 " Default highlight is better than polyglot
 let g:polyglot_disabled = ['python', 'go']
 let python_highlight_all = 1
+
+" ruby
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1
+
+augroup vimrc-ruby
+  autocmd!
+  autocmd BufNewFile,BufRead *.rb,*.rbw,*.gemspec setlocal filetype=ruby
+  autocmd FileType ruby set tabstop=2|set shiftwidth=2|set expandtab softtabstop=2 smartindent
+augroup END
+
+let g:tagbar_type_ruby = {
+    \ 'kinds' : [
+        \ 'm:modules',
+        \ 'c:classes',
+        \ 'd:describes',
+        \ 'C:contexts',
+        \ 'f:methods',
+        \ 'F:singleton methods'
+    \ ]
+\ }
+
+" RSpec.vim mappings
+map <Leader>t :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
+
+" Ruby refactory
+nnoremap <leader>rap  :RAddParameter<cr>
+nnoremap <leader>rcpc :RConvertPostConditional<cr>
+nnoremap <leader>rel  :RExtractLet<cr>
+vnoremap <leader>rec  :RExtractConstant<cr>
+vnoremap <leader>relv :RExtractLocalVariable<cr>
+nnoremap <leader>rit  :RInlineTemp<cr>
+vnoremap <leader>rrlv :RRenameLocalVariable<cr>
+vnoremap <leader>rriv :RRenameInstanceVariable<cr>
+vnoremap <leader>rem  :RExtractMethod<cr>
+
+" Scala
+autocmd BufWritePost *.scala silent :EnTypeCheck
+nnoremap <localleader>t :EnType<CR>
+let g:scala_scaladoc_indent = 1
 
 "*****************************************************************************
 "*****************************************************************************
@@ -472,13 +774,55 @@ else
   let g:airline_symbols.linenr = ''
 endif
 
+" python 3
+let g:python_host_prog = '/usr/local/bin/python'
+let g:python2_host_prog = '/usr/local/bin/python2'
+let g:python3_host_prog = '/usr/local/bin/python3'
+
+" Use deoplete.
+let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+let g:deoplete#ignore_sources = {}
+let g:deoplete#ignore_sources._ = ['neosnippet', 'around']
+
+let g:deoplete#sources#go#align_class = 1
+let g:deoplete#sources#go#package_dot = 1
+let g:deoplete#sources#go#pointer = 1
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+
+"Linting with neomake
+let g:neomake_sbt_maker = {
+      \ 'exe': 'sbt',
+      \ 'args': ['-Dsbt.log.noformat=true', 'compile'],
+      \ 'append_file': 0,
+      \ 'auto_enabled': 1,
+      \ 'output_stream': 'stdout',
+      \ 'errorformat':
+          \ '%E[%trror]\ %f:%l:\ %m,' .
+            \ '%-Z[error]\ %p^,' .
+            \ '%-C%.%#,' .
+            \ '%-G%.%#'
+     \ }
+let g:neomake_enabled_makers = ['sbt']
+let g:neomake_verbose=3
+
+" Neomake on text change
+" autocmd InsertLeave,TextChanged *.scala update | Neomake! sbt - You can enable this for sbt
+
 colorscheme tomorrow-night
 hi Normal guibg=NONE ctermbg=NONE
 
-set shell=/bin/zsh
+let g:go_auto_type_info = 1
+
+set updatetime=100
 
 " commentary
 noremap <leader>cc :Commentary<cr>
+
+" neocomplete like
+set completeopt+=noinsert
+" deoplete.nvim recommend
+set completeopt+=noselect
+set completeopt-=preview
 
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
@@ -501,6 +845,16 @@ autocmd FileType qf 6wincmd_
 
 " if hidden is not set, TextEdit might fail.
 set hidden
+
+" rust
+let g:rustfmt_autosave = 1
+let g:racer_cmd = "/Users/adebayo/.cargo/bin/racer"
+let g:racer_experimental_completer = 1
+let g:racer_insert_paren = 1
+au FileType rust nmap gd <Plug>(rust-def)
+au FileType rust nmap gs <Plug>(rust-def-split)
+au FileType rust nmap gx <Plug>(rust-def-vertical)
+au FileType rust nmap <leader>gd <Plug>(rust-doc)
 
 " Some servers have issues with backup files, see #649
 set nobackup
@@ -626,3 +980,5 @@ nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
 
 " json comment
 autocmd FileType json syntax match Comment +\/\/.\+$+
+
+
