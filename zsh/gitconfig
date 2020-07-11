@@ -2,8 +2,8 @@
 [user]
 # Please adapt and uncomment the following lines:
 	name = Adebayo Akinlaja
-	email = adebayo.akinlaja@andela.com
-	signingkey = 467E0E1BDB76EF4B
+	email = adebayo.tag@gmail.com
+	signingkey = 
 
 [url "https://github.com/"]
     insteadOf = gh:
@@ -114,4 +114,4 @@
 [push]
 	default = current
 [gpg]
-	program = gpg2
+	program = gpg
