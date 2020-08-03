@@ -5,6 +5,9 @@
 	email = adebayo.tag@gmail.com
 	signingkey = 
 
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+
 [url "https://github.com/"]
     insteadOf = gh:
 

@@ -71,8 +71,8 @@ export DEFAULT_USER="$USER"
 export PATH="$PATH:$HOME/bin"
 
 # personal workspace
-export STATION=$HOME/workspace
-export PATH=$PATH:$HOME/workspace/scripts/utils
+export STATION=$HOME/Workspace
+export PATH=$PATH:$HOME/Workspace/Scripts/bin
 
 # aliases
 alias git='nocorrect git'
@@ -80,8 +80,10 @@ alias vim='nvim'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
 alias screenshot='grim -g "$(slurp)" screenshot.png'
+alias enter='toolbox enter --container'
 alias zshconfig="vim ~/.zshrc"
 alias vimconfig="vim ~/.vimrc"
+alias gitconfig="vim ~/.gitconfig"
 alias ll="ls -l"
 alias cls="cl.sh"
 alias cl="clear"
@@ -90,16 +92,15 @@ alias clrep="cleanrepo.sh"
 alias ff="filefinder.sh"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+#export PATH="$PATH:$HOME/.rvm/bin"
 
 # got commit editor
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
 # golang
-export GOPATH=$HOME/workspace/go
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:/usr/local/opt/go/libexec/bin
+export GOPATH=$HOME/Workspace/Go
+export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
