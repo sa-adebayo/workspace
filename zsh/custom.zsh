@@ -26,4 +26,12 @@
 # export PATH="$PATH:$HOME/google/cloud-sql-proxy"
 # export CLOUDSQLPROXYPATH=$HOME/scratches/certificates/microservices-9e02236eb849.json
 
-# source <(kubectl completion zsh)
+# Create a cache folder if it isn't exists
+if [ ! -d "$HOME/.cache/zsh" ]; then
+     mkdir -p $HOME/.cache/zsh
+fi
+    
+# Define a custom file for compdump
+export ZSH_COMPDUMP="$HOME/.cache/zsh/zcompdump-$HOST-$ZSH_VERSION"
+
+source <(kubectl completion zsh)

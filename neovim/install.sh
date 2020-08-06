@@ -5,4 +5,5 @@ mkdir -p $HOME/.config/nvim/colors
 echo installing nvim config...
 cp tomorrow-night.vim tomorrow.vim $HOME/.config/nvim/colors
 cp init.vim coc-settings.json $HOME/.config/nvim
+ln -s $HOME/.config/nvim/init.vim $HOME/.vimrc
 

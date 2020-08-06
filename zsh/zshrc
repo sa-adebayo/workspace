@@ -82,6 +82,7 @@ alias pbpaste='xclip -selection clipboard -o'
 alias screenshot='grim -g "$(slurp)" screenshot.png'
 alias enter='toolbox enter --container'
 alias zshconfig="vim ~/.zshrc"
+alias zshcustomconfig="vim $ZSH/custom/custom.zsh"
 alias vimconfig="vim ~/.vimrc"
 alias gitconfig="vim ~/.gitconfig"
 alias ll="ls -l"
@@ -95,7 +96,7 @@ alias ff="filefinder.sh"
 #export PATH="$PATH:$HOME/.rvm/bin"
 
 # got commit editor
-export VISUAL=nvim
+export VISUAL=vim
 export EDITOR="$VISUAL"
 
 # golang
