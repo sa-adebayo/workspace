@@ -2,7 +2,6 @@
 
 dirs=(
 	"neovim"
-	"tmux"
 	"zsh"
 	"cmd"
 )
