@@ -61,6 +61,23 @@ plugins=(
 	command-not-found
 )
 
+### making all these calls before sourcing the oh-my-zsh.sh file because of compinit() ######
+# Create a cache folder if it isn't exists
+if [ ! -d "$HOME/.cache/zsh" ]; then
+	mkdir -p $HOME/.cache/zsh
+fi
+
+# Define a custom file for compdump
+export ZSH_COMPDUMP="$HOME/.cache/zsh/zcompdump-$HOST-$ZSH_VERSION"
+
+# Configuring completion for brew in zsh
+if type brew &>/dev/null; then
+	FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+	autoload -Uz compinit
+	compinit
+fi
+### all required scripts have been ran before calling the next function which triggers the compinit by default ####
+
 source $ZSH/oh-my-zsh.sh
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"
